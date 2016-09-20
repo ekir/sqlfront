@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>SQLfront</title>
+</head>
+<body>
+<div style="position: absolute; left: 100px; right: 100px; top: 10px; bottom: 10px; background: yellow">
+    <div style="position: relative; margin: 0px auto; background-color: green; width: 300px; top: 100px ">
+    <table>
+    <tr>
+      <td>Username:</td><td><input name="username" class="text_input username_input" type="text"></td>
+    <tr></tr>
+      <td>Password:</td><td><input name="password" class="text_input password_input" type="password"></td>
+    <tr></tr>
+      <td>Host:</td><td><input name="hostname" class="hostname_input" type="text" value="localhost"></td>
+    </tr>
+    </table>
+    <input class="login_submit" type="button" value="Login">
+    <span class="login_failed" style="color: red; display: none">Could not login. Try again</span>
+    <br>
+  </div>
+</div>
+</body>
+</html>
+
+<script language="javascript" src="jquery.min.js"></script>
+<script language="javascript">
+
+jQuery(document).ready(function() {
+  jQuery(".username_input").focus();
+});
+
+jQuery(".username_input").keypress(function(event) {
+  jQuery(".login_failed").hide();
+  if(event.keyCode==13) {
+    jQuery(".password_input").focus();
+  }
+});
+
+jQuery(".password_input").keypress(function(event) {
+  jQuery(".login_failed").hide();
+  if(event.keyCode==13) {
+    do_login();
+  }
+});
+
+jQuery(".login_submit").click(function() {
+  do_login();
+});
+
+function do_login() {
+    var query="trylogin.php?username="+jQuery(".username_input").attr("value")+"&password="+jQuery(".password_input").attr("value")+"&hostname="+jQuery(".hostname_input").attr("value");
+    jQuery.ajax({url: query, success: function(data) {
+      if(data==1) {
+        window.location="inside.php";
+      } else {
+        jQuery(".password_input").focus();
+        jQuery(".password_input").select();
+        jQuery(".login_failed").show();
+      }
+    }});
+}
+
+</script>
